@@ -3,15 +3,27 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const articleSchema = new Schema({
-  title: {
+  title_ar: {
     type: String,
     required: true,
   },
-  body: {
+  title_fr: {
     type: String,
     required: true,
   },
-  images: [{
+  body_ar: {
+    type: String,
+    required: true,
+  },
+  body_fr: {
+    type: String,
+    required: true,
+  },
+  mainImage:{
+    type: String,
+    required:true
+  },
+  all_images: [{
     type: String,
     required: false,
   }],
