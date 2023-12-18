@@ -3,7 +3,7 @@ const router = express.Router();
 const { getAllArticles, getArticleById, deleteArticleById, updateArticleById, uploadImage, uploadImages, createarticle } = require("../controllers/articleController copy");
 const multer = require('multer');
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer();
 
 
 
