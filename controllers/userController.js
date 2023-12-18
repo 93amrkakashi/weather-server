@@ -3,13 +3,13 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
 const createToken = (_id) => {
-  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "3d" });
+  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
 };
 
 // login a user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
+console.log(req.body )
   try {
     const user = await User.login(email, password);
     const firstName = user.firstName;
@@ -30,7 +30,7 @@ const signupUser = async (req, res) => {
   console.log(req)
 
   try {
-    const user = await User.signup(firstName, lastName, email, password, admin=false);
+    const user = await User.signup(firstName, lastName, email, password, admin=false, aproved=false);
     console.log(firstName, lastName, email, password)
 
     // create a token
