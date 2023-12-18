@@ -1,11 +1,12 @@
-// const multer = require('multer');
-// const path = require('path');
+const multer = require('multer');
 
-// module.exports = multer({
-//     storage: multer.diskStorage({}),
-//     fileFilter: (req, file, cb) => {
-//         let ext = path.extname(file.originalname);
-        
-//         cb(null, true);
-//     },
-// });
+const storage = multer.diskStorage({
+  destination: '/tmp', // يتم تحديد المسار إلى /tmp بدلاً من /var/task/uploads
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix);
+  }
+});
+
+const upload = multer({ storage: storage });
+
