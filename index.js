@@ -24,9 +24,9 @@ app.use((req, res, next) => {
 app.use(cors());
 
 //routes
+app.post('/api/articles/upload', upload.single('mainimagee'),uploadImage)
 app.use('/api/user', userRoutes)
 app.use("/api/articles", articlesRoutes);
-app.post('/api/articles/upload', upload.single('mainimagee'),uploadImage)
 app.get("/", (req,res) => {
   res.json({msg:"app is running"})
 })
