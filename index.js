@@ -2,8 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
-const userRoutes = require('./routes/users')
-const articlesRoutes = require('./routes/articles');
+const userRoutes = require('./api/users')
+const articlesRoutes = require('./api/articles');
 const { uploadImage } = require("./controllers/articleController copy");
 const multer = require('multer');
 // const upload = multer({ dest: 'uploads/' });
