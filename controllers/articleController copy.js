@@ -70,13 +70,13 @@ const deleteArticleById = async (req, res) => {
 // Controller function to update an article by ID
 const updateArticleById = async (req, res) => {
   const { id } = req.params;
-  const { title, body, mainImage, images } = req.body;
+  const { title_ar,title_fr, body_ar, body_fr,mainImage, all_images  } = req.body;
 
   try {
     const updatedArticle = await ArticleModel.findByIdAndUpdate(
       id,
-      { title, body, mainImage, images },
-      { new: true }
+      { title_ar,title_fr, body_ar, body_fr,mainImage, all_images},
+      // { new: true }
     );
 
     if (!updatedArticle) {
