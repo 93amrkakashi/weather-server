@@ -16,7 +16,6 @@ const app = express();
 
 // middleware
 app.use(express.json());
-// app.use(fileupload({useTempFiles: true}))
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
 
