@@ -4,7 +4,10 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const userRoutes = require('./routes/users')
 const articlesRoutes = require('./routes/articles');
-
+const { uploadImage } = require("./controllers/articleController copy");
+const multer = require('multer');
+// const upload = multer({ dest: 'uploads/' });
+const upload = multer();
 
 
 
@@ -23,6 +26,7 @@ app.use(cors());
 
 //routes
 app.use("/api/articles", articlesRoutes);
+app.post('/api/articles/upload', upload.single('mainimagee'),uploadImage)
 app.use('/api/user', userRoutes)
 app.get("/", (req,res) => {
   res.json({msg:"app is running"})

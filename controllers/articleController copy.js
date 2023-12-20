@@ -46,20 +46,26 @@ const getArticleById = async (req, res) => {
 // Controller function to delete an article by ID
 const deleteArticleById = async (req, res) => {
   const { id } = req.params;
-
   try {
-    const deletedArticle = await ArticleModel.findByIdAndDelete(id);
+    const article = await ArticleModel.findById(id);
+    const imageIds = article.all_images.map(img => `article_images/${img.split('article_images/')[1].split('.')[0]}`);
+    if (imageIds.length > 0) {
+      const deletionResult = await cloudinary.api.delete_resources(imageIds);
+    }
 
+    const deletedArticle = await ArticleModel.findByIdAndDelete(id);
     if (!deletedArticle) {
       return res.status(404).json({ error: "المقال غير موجود" });
     }
-
     res.status(200).json({ message: "تم حذف المقال بنجاح" });
   } catch (error) {
     console.error("Error deleting article:", error);
     res.status(500).json({ error: "حدث خطأ أثناء حذف المقال" });
   }
 };
+
+
+
 
 // Controller function to update an article by ID
 const updateArticleById = async (req, res) => {
@@ -83,6 +89,8 @@ const updateArticleById = async (req, res) => {
     res.status(500).json({ error: "حدث خطأ أثناء تعديل المقال" });
   }
 };
+
+
 const createarticle = async (req, res) => {
   const { title_ar,title_fr, body_ar, body_fr,mainImage, all_images } = req.body;
   console.log(req.body)
@@ -101,10 +109,10 @@ const createarticle = async (req, res) => {
 };
 
 // const uploadImage =  async (req,res) => {
-//   let file = req.file
-//   console.log(file)
+//   console.log(req.files)
+//   let file = req.files
 //   try {
-//     const result = await cloudinary.uploader.upload(file.path, { folder: 'articles', resource_type: 'image' });
+//     const result = await cloudinary.uploader.upload(file.path, { folder: 'article_images', resource_type: 'image' });
 //     // return result.secure_url;
 //     return res.status(200).json(result.secure_url);
 //   } catch (error) {
@@ -115,6 +123,7 @@ const createarticle = async (req, res) => {
 const uploadImages = async (req, res) => {
   try {
     const files = req.files;
+    console.log(files)
     const uploadPromises = files.map(async (file, index) => {
       const result = await cloudinary.uploader.upload(file.path, {
         folder: 'article_images',
@@ -135,11 +144,44 @@ const uploadImages = async (req, res) => {
 };
 
 
+const uploadImage =  async (req,res) => {
+  console.log(req.file)
+  let file = req.file
+  try {
+    const result = await cloudinary.uploader.upload(file.path, { folder: 'article_images', resource_type: 'image' });
+    // return result.secure_url;
+    return res.status(200).json(result.secure_url);
+  } catch (error) {
+    console.log(error)
+    throw error;
+  }
+}
+
+
+
+const deleteImage = async (req, res) => {
+  try {
+    const { imageId } = req.body;
+    console.log(imageId)
+    const deletionResult = await cloudinary.uploader.destroy(imageId);
+    if (deletionResult.result !== 'ok') {
+      return res.status(500).json({ error: "فشلت عملية حذف الصورة" });
+    }
+    res.status(200).json({ message: "تم حذف الصورة بنجاح" });
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    res.status(500).json({ error: "حدث خطأ أثناء حذف الصورة" });
+  }
+};
+
+
 module.exports = {
   getAllArticles,
   getArticleById,
   deleteArticleById,
   updateArticleById,
   uploadImages,
-  createarticle
+  createarticle,
+  uploadImage,
+  deleteImage
 };

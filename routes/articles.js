@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { getAllArticles, getArticleById, deleteArticleById, updateArticleById, uploadImage, uploadImages, createarticle } = require("../controllers/articleController copy");
+const { getAllArticles, getArticleById, deleteArticleById, updateArticleById, uploadImages, createarticle, uploadImage, deleteImage } = require("../controllers/articleController copy");
 const multer = require('multer');
-
+// const upload = multer({ dest: 'uploads/' });
 const upload = multer();
+
 
 
 
@@ -15,12 +16,10 @@ router.get('/', getAllArticles);
 router.get('/:id', getArticleById);
 router.post('/', createarticle);
 
-// create a article
-// router.post('/', createArticleWithImages );
 
+router.post('/uploadimages', upload.array('images', 10), uploadImages);
+router.delete('/deleteimage', deleteImage);
 
-// router.post('/upload',upload.single('image'),uploadImage );
-router.post('/upload', upload.array('images', 5), uploadImages);
 
 // delete a article
 router.delete('/:id', deleteArticleById);
